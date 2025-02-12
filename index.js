@@ -3,7 +3,7 @@ const { MongoClient } = require("mongodb");
 const cors = require("cors");
 
 const app = express();
-const uri = "mongodb+srv://megeshalawa:megeshalawa@cluster0.zaf4v.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = "mongodb+srv://hussnainrajpoot5415:123456...@blogsdb.9xfkjee.mongodb.net/?retryWrites=true&w=majority&appName=blogsdb";
 const client = new MongoClient(uri);
 app.use(express.json());
 app.use(cors());
@@ -22,14 +22,10 @@ async function connectToDatabase() {
 (async () => {
   try {
     await connectToDatabase();
-    const db = client.db("TenderDatabase"); // Replace with your actual database name
-    const collection = db.collection("tenders"); // Replace with your actual collection name
+    const db = client.db("TenderDatabase");
+    const collection = db.collection("tenders");
 
-    /**
-     * ✅ API 1: Get All Tenders
-     * Endpoint: GET /api/tenders
-     * Returns: All tenders from MongoDB
-     */
+    // ✅ API 1: Get All Tenders
     app.get("/api/tenders", async (req, res) => {
       try {
         const tenders = await collection.find({}).toArray();
@@ -40,16 +36,11 @@ async function connectToDatabase() {
       }
     });
 
-    /**
-     * ✅ API 2: Get Paginated Tenders
-     * Endpoint: GET /api/tenders/page/:page
-     * Params: page (number) → Default: 1
-     * Returns: 10 tenders per page
-     */
+    // ✅ API 2: Get Paginated Tenders (10 per page)
     app.get("/api/tenders/page/:page", async (req, res) => {
       try {
         let page = parseInt(req.params.page) || 1;
-        let limit = 10; // Show 10 tenders per page
+        let limit = 10;
         let skip = (page - 1) * limit;
 
         const tenders = await collection.find({})
@@ -75,7 +66,7 @@ async function connectToDatabase() {
     });
 
     // Start the Express server
-    const port = process.env.PORT || 8080;
+    const port = process.env.PORT || 8000;
     app.listen(port, () => console.log(`🚀 Server running on port ${port}`));
 
   } catch (error) {
