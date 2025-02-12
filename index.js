@@ -36,6 +36,30 @@ async function connectToDatabase() {
       }
     });
 
+    // ✅ API 3: Get a Single Tender by ID
+    app.get("/api/tenders/:id", async (req, res) => {
+      try {
+        const tenderId = req.params.id;
+
+        // Validate ID format
+        if (!ObjectId.isValid(tenderId)) {
+          return res.status(400).json({ success: false, message: "Invalid Tender ID" });
+        }
+
+        // Find tender by _id
+        const tender = await collection.findOne({ _id: new ObjectId(tenderId) });
+
+        if (!tender) {
+          return res.status(404).json({ success: false, message: "Tender not found" });
+        }
+
+        res.json({ success: true, data: tender });
+      } catch (error) {
+        console.error("Error fetching tender by ID:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+      }
+    });
+
     // ✅ API 2: Get Paginated Tenders (10 per page)
     app.get("/api/tenders/page/:page", async (req, res) => {
       try {
